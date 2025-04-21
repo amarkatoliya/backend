@@ -76,7 +76,6 @@ const registerUser = async (req,res) => {
         return res.status(400).json({
             message:"User failed to register",
             error,
-            success:false,
         })
     }
 
