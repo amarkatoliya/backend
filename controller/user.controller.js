@@ -97,14 +97,15 @@ const varifyUser = async (req,res) => {
 
     if(!token){
         return res.status(400).json({
-            message:"Invaid token"
+            message:"Invaid token 1"
         });
     }
-    const user =await User.findOne({verificationToken: token});
-
+    const user = await User.findOne({verificationToken:token});
+    // console.log(user);
+    
     if(!user){
         return res.status(400).json({
-            message:"Invaid token"
+            message:"Invaid token 2"
         });
     }
 
@@ -112,11 +113,10 @@ const varifyUser = async (req,res) => {
     user.verificationToken = undefined;
     await user.save();
 
-    return res.status(200).jason({
+    return res.status(200).json({
         success:true,
         message:"User is varified succesfully",
     });
-
 }
 
 const login = async (req,res) => {
@@ -130,7 +130,7 @@ const login = async (req,res) => {
     }
 
     try {
-       const user = await  User.findOne(email)
+       const user = await  User.findOne({email})
         if(!user){
             return res.status(400).json({
                 message:"Invaid email or password"
@@ -159,7 +159,6 @@ const login = async (req,res) => {
         res.status(200).json({
             success:true,
             message:"user login succesfully",
-            token,
             user:{
                 id:user._id,
                 roll:user.roll,
@@ -170,7 +169,7 @@ const login = async (req,res) => {
         res.status(500).json({
             message:"failed to login due to server problem",
             success:true,
-            error,
+            error : error.message,
         });
     }
 
