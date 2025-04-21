@@ -14,7 +14,7 @@ const registerUser = async (req,res) => {
     //send varification token to user
     // sucess message display
 
-    const {name ,email,password} = req.body // collect data  in request body
+     const {name ,email,password} = req.body; // collect data  in request body
 
     if(!name || !email || !password)        // check if user already exists
         return res.status(400).json({
@@ -31,8 +31,8 @@ const registerUser = async (req,res) => {
         const user = await User.create({
             name,
             email,
-            password
-        })
+            password,
+        });
         console.log(user);
         
 
@@ -42,9 +42,9 @@ const registerUser = async (req,res) => {
             })
         }
         
-        const token = crpto.randomBytes(32).toString("hex")
+        const token = crpto.randomBytes(32).toString("hex");
         console.log(token);
-        user.verificationToken = token
+        user.verificationToken = token;
         await user.save();
         //send email
         const transporter = nodemailer.createTransport({
@@ -70,7 +70,7 @@ const registerUser = async (req,res) => {
         res.status(200).json({
             message:"User registere succesfully",
             success:true,
-        })
+        });
 
     } catch (error) {
         return res.status(400).json({
@@ -92,31 +92,40 @@ const varifyUser = async (req,res) => {
     //return responce
 
     const {token} = req.params;
-    console.log(token);
+    // console.log(token);
 
     if(!token){
         return res.status(400).json({
             message:"Invaid token"
-        })
+        });
     }
-    const user =await User.findOne({verificationToken: token})
+    const user =await User.findOne({verificationToken: token});
+
     if(!user){
         return res.status(400).json({
             message:"Invaid token"
-        })
+        });
     }
+
     user.isVerified =true;
-    user.verificationToken = undefined
+    user.verificationToken = undefined;
     await user.save();
+
+    return res.status(200).jason({
+        success:true,
+        message:"User is varified succesfully",
+    });
+
 }
 
 const login = async (req,res) => {
+
     const {email,password} = req.body;
     
     if(!email || !password){
         return res.status(400).json({
             message:"All the fields are required"
-        })
+        });
     }
 
     try {
@@ -124,27 +133,28 @@ const login = async (req,res) => {
         if(!user){
             return res.status(400).json({
                 message:"Invaid email or password"
-            }) 
+            });
         }
-        const isMatch = await bcrypt.compare(password,user.password)
+        const isMatch = await bcrypt.compare(password,user.password);
         if(!isMatch){
             return res.status(400).json({
                 message:"Invaid email or password"
-            })
+            });
         }
         console.log(isMatch);
         
-        const token = jwt.sign({id: user_.id},
+        const token = jwt.sign({id: user._id},
             "shhhh",{
-                expiresIn: "24h"
+                expiresIn: "24h",
             }
         )
         const cookieOption = {
             httpOnly: true,
             secure:true,
-            maxAge:24*60*60*1000,
+            maxAge: 24*60*60*1000, //24 hour
         }
         res.cookie("token",token,cookieOption)
+
         res.status(200).json({
             success:true,
             message:"user login succesfully",
@@ -152,14 +162,15 @@ const login = async (req,res) => {
             user:{
                 id:user._id,
                 roll:user.roll,
-                name:user.name
+                name:user.name,
             }
-        })
+        });
     } catch (error) {
-        res.status(400).json({
-            message:"failed to login",
-            success:true
-        })
+        res.status(500).json({
+            message:"failed to login due to server problem",
+            success:true,
+            error,
+        });
     }
 
 }
