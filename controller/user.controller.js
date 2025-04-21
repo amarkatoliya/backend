@@ -46,11 +46,12 @@ const registerUser = async (req,res) => {
         console.log(token);
         user.verificationToken = token;
         await user.save();
+
         //send email
         const transporter = nodemailer.createTransport({
             host: process.env.MAILTRAP_HOST,
             port: process.env.MAILTRAP_PORT,
-            secure: false, // true for port 465, false for other ports
+            secure: false,    // true for port 465, false for other ports
             auth: {
               user: process.env.MAILTRAP_USERNAME,
               pass: process.env.MAILTRAP_PASSWORD,
@@ -135,7 +136,7 @@ const login = async (req,res) => {
                 message:"Invaid email or password"
             });
         }
-        const isMatch = await bcrypt.compare(password,user.password);
+        const isMatch = bcrypt.compare(password, user.password);
         if(!isMatch){
             return res.status(400).json({
                 message:"Invaid email or password"
