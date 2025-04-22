@@ -1,6 +1,6 @@
-import User from "../model/User.model.js"
-import crpto from "crypto"
-import nodemailer from "nodemailer"
+import User from "../model/User.model.js";
+import crpto from "crypto";
+import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -117,7 +117,7 @@ const varifyUser = async (req,res) => {
         success:true,
         message:"User is varified succesfully",
     });
-}
+};
 
 const login = async (req,res) => {
 
@@ -173,6 +173,6 @@ const login = async (req,res) => {
         });
     }
 
-}
+};
 
 export { registerUser,varifyUser,login};
