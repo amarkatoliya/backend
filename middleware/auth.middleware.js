@@ -7,7 +7,7 @@ export const isLoggedIn = async (req,res,next) => {
 
     try {
         //get token from cookie
-        console.log("hiiiiiiiii");
+        // console.log("hiiiiiiiii");
         
         // console.log(req.cookies)
         let token = req.cookies?.token;
@@ -22,7 +22,7 @@ export const isLoggedIn = async (req,res,next) => {
                 message:"token not found so authentication failed"
             });
         }
-        console.log("i am here");
+        // console.log("i am here");
         
 
         const decoded = await  jwt.verify(token,process.env.SECREAT_KEY)

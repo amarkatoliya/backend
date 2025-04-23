@@ -176,16 +176,56 @@ const login = async (req,res) => {
 
 };
 
-const forgetPassword = async (req,res) => {
+const resetPassword = async (req,res) => {
+    
     try {
+
         
     } catch (error) {
         
     }
 }
 
-const resetPassword = async (req,res) => {
+const getProfile = async (req,res) => {
     try {
+        const user = await User.findById(req.user.id).select("-password");
+        console.log(user);  // for checking
+        
+        if(!user){
+            return res.status(401).json({
+                success:false,
+                message:"user not found"
+            });
+        }
+        res.status(201).json({
+            success:true,
+            user,
+        });
+    } catch (error) {
+        console.log("error founding user profile:",error);  
+    }
+}
+
+const forgetPassword = async (req,res) => {
+    try {
+        // get mail
+        const {email} = req.body;
+
+        if(!email){
+            return res.status(401).json({
+                success:false,
+                message:"please enter email"
+            })
+        }
+        // find user based on email
+        const user = await User.findOne({email})
+        console.log(user);     // just checking
+
+        //reset token 
+        user.verificationToken = undefined;
+        await user.save();
+
+        //send mail to user for password
         
     } catch (error) {
         
@@ -208,4 +248,4 @@ const logout = async (req,res) => {
     }
 }
 
-export { registerUser ,varifyUser ,login ,forgetPassword ,resetPassword ,logout};
+export { registerUser ,varifyUser ,login ,forgetPassword ,resetPassword ,logout ,getProfile};
