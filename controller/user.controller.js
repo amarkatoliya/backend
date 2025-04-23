@@ -145,7 +145,8 @@ const login = async (req,res) => {
         console.log(isMatch);
         
         const token = jwt.sign({id: user._id},
-            "shhhh",{
+            process.env.SECREAT_KEY,
+            {
                 expiresIn: "24h",
             }
         )
@@ -154,7 +155,7 @@ const login = async (req,res) => {
             secure:true,
             maxAge: 24*60*60*1000, //24 hour
         }
-        res.cookie("token",token,cookieOption)
+        res.cookie("token",token,cookieOption);
 
         res.status(200).json({
             success:true,
@@ -175,4 +176,36 @@ const login = async (req,res) => {
 
 };
 
-export { registerUser,varifyUser,login};
+const forgetPassword = async (req,res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+const resetPassword = async (req,res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+const logout = async (req,res) => {
+    try {
+        res.cookie("token","",{});
+        res.status(201).json({
+            message:"User logout succesfully",
+            success:true
+        })
+        
+    } catch (error) {
+        res.status(401).json({
+            message:"interval server issue in logout",
+            success:false
+        })
+    }
+}
+
+export { registerUser ,varifyUser ,login ,forgetPassword ,resetPassword ,logout};
