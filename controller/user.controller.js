@@ -179,10 +179,38 @@ const login = async (req,res) => {
 const resetPassword = async (req,res) => {
     
     try {
+        const {token} = req.params;
+    // console.log(token);
 
+    if(!token){
+        return res.status(400).json({
+            message:"Invaid token 1"
+        });
+    }
+    const user = await User.findOne({verificationToken:token});
+    // console.log(user);
+    
+    if(!user){
+        return res.status(400).json({
+            message:"Invaid token 2"
+        });
+    }
+
+    user.isVerified =true;
+    user.verificationToken = undefined;
+    await user.save();
+
+    return res.status(200).json({
+        success:true,
+        message:"User is varified succesfully",
+    });
         
     } catch (error) {
-        
+        res.status(400).json({
+            success:false,
+            message:"User is  not varified ",
+            error:error.message
+        })
     }
 }
 
@@ -218,17 +246,50 @@ const forgetPassword = async (req,res) => {
             })
         }
         // find user based on email
-        const user = await User.findOne({email})
+        const user = await User.findOne({email});
         console.log(user);     // just checking
 
         //reset token 
-        user.verificationToken = undefined;
+        // user.verificationToken = undefined;
+        // await user.save();
+
+        const token = crpto.randomBytes(32).toString("hex");
+        console.log(token);
+        user.verificationToken = token;
         await user.save();
 
+        //send email
+        const transporter = nodemailer.createTransport({
+            host: process.env.MAILTRAP_HOST,
+            port: process.env.MAILTRAP_PORT,
+            secure: false,    // true for port 465, false for other ports
+            auth: {
+              user: process.env.MAILTRAP_USERNAME,
+              pass: process.env.MAILTRAP_PASSWORD,
+            },
+        });
+
+        const mailOption ={
+            from: process.env.MAILTRAP_SENDEREMAIL,
+            to: user.email,
+            subject: "Verify your Email",
+            text: `varify your email for reset password ${process.env.BASE_URL}/api/v1/users/reset/${token}`,
+            html: "<b>Email For Varification foe pass </b>",
+        }
+        
+        transporter.sendMail(mailOption)
+
+
         //send mail to user for password
+        res.status(200).json({
+            message:" plaese varify"
+        })
         
     } catch (error) {
-        
+        return res.status(400).json({
+            message:"User failed to varify for reset pass",
+            error,
+        })
     }
 }
 
