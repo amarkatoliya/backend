@@ -176,7 +176,7 @@ const login = async (req,res) => {
 
 };
 
-const resetPassword = async (req,res) => {
+const resetPasswordvarify = async (req,res) => {
     
     try {
         const {token} = req.params;
@@ -309,4 +309,50 @@ const logout = async (req,res) => {
     }
 }
 
-export { registerUser ,varifyUser ,login ,forgetPassword ,resetPassword ,logout ,getProfile};
+const resetPass = async (req,res) => {
+    try {
+        const {password, confpassword,email  } = req.body;
+        
+        
+        if(!password || !confpassword || !email){
+            return res.status(400).json({
+                message:"enter valid pass"
+            });
+        }
+        
+        const user = await  User.findOne({email})
+        if(!user){
+            return res.status(400).json({
+                message:"Invaid email or password"
+            });
+        }
+        // const isMatch = bcrypt.compare(password, user.password);
+        // if(!isMatch){
+        //     return res.status(400).json({
+        //         message:"Invaid email or password"
+        //     });
+        // }
+        // console.log(isMatch);
+        console.log("hiii");
+
+        if(password === confpassword){
+        // const user = await User.findOne({email});
+           user.password = password;
+           await user.save();
+           console.log(user)
+           return res.status(200).json({
+            message:"password updated",
+            success:true
+        });
+        }
+        
+    } catch (error) {
+        res.status(400).json({
+            message:"server issue in process",
+            success:false,
+            error:error
+        })
+    }
+}
+
+export { registerUser ,varifyUser ,login ,forgetPassword ,resetPasswordvarify ,logout ,getProfile, resetPass};
