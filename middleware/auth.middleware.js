@@ -6,7 +6,6 @@ dotenv.config()
 export const isLoggedIn = async (req,res,next) => {
 
     try {
-        
         //get token from cookie
         // console.log("hiiiiiiiii");
         
@@ -24,7 +23,7 @@ export const isLoggedIn = async (req,res,next) => {
             });
         }
         // console.log("i am here");
-        
+        console.log("hello")
 
         const decoded = await  jwt.verify(token,process.env.SECREAT_KEY)
         console.log(decoded);

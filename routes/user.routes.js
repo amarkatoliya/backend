@@ -1,7 +1,5 @@
 import express from "express";
-
 import {registerUser, varifyUser ,login, logout, getProfile, forgetPassword, resetPasswordvarify, resetPass} from "../controller/user.controller.js";
-
 import { isLoggedIn } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
