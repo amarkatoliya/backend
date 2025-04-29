@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 import dotenv from "dotenv";
 
 dotenv.config()
@@ -12,7 +13,7 @@ export const isLoggedIn = async (req,res,next) => {
         // console.log(req.cookies)
         let token = req.cookies?.token;
 
-        console.log("Token Founded:",token);
+        // console.log("Token Founded:",token);  // debugging case
         
         // validate token
 
@@ -23,10 +24,11 @@ export const isLoggedIn = async (req,res,next) => {
             });
         }
         // console.log("i am here");
-        console.log("hello")
+        // console.log("hello")  // just debugging
 
-        const decoded = await  jwt.verify(token,process.env.SECREAT_KEY)
-        console.log(decoded);
+        const decoded = await  jwt.verify(token,process.env.SECREAT_KEY);
+
+        // console.log(decoded);
 
         //send it to req.user
 
@@ -40,5 +42,6 @@ export const isLoggedIn = async (req,res,next) => {
             error:error
         });
     }
+
     next();   // next is imp for next line run 
 };

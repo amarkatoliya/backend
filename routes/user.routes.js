@@ -20,4 +20,5 @@ router.get("/profile",isLoggedIn, getProfile);
 
 router.post("/resetpass",resetPass)
 
+
 export default router;
