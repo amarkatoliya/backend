@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 import bcrypt from "bcryptjs";
 
+
 const userSchema = new mongoose.Schema(
+  
   {
     name: {
       type:String,
@@ -39,7 +41,9 @@ const userSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
+
 );
+
 
 userSchema.pre("save", async function(next){
   

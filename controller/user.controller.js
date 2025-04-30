@@ -26,20 +26,20 @@ const registerUser = async (req,res) => {
         if(existingUser){
             return res.status(400).json({
                 message:"User is already exists"
-            })
+            });
         }
         const user = await User.create({
             name,
             email,
             password,
         });
-        console.log(user);
+        // console.log(user);
         
 
         if(!user){
             return res.status(400).json({
                 message:"User not registered"
-            })
+            });
         }
         
         const token = crpto.randomBytes(32).toString("hex");
@@ -97,7 +97,7 @@ const varifyUser = async (req,res) => {
 
     if(!token){
         return res.status(400).json({
-            message:"Invaid token 1"
+            message:"Invaid token 1 "
         });
     }
     const user = await User.findOne({verificationToken:token});
