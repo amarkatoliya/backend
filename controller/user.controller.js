@@ -355,4 +355,7 @@ const resetPass = async (req,res) => {
     }
 }
 
-export { registerUser ,varifyUser ,login ,forgetPassword ,resetPasswordvarify ,logout ,getProfile, resetPass};
+const getDetail = async (req,res) => {
+
+}
+export { registerUser ,varifyUser ,login ,forgetPassword ,resetPasswordvarify ,logout ,getProfile, resetPass, getDetail};

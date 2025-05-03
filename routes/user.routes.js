@@ -1,5 +1,5 @@
 import express from "express";
-import {registerUser, varifyUser ,login, logout, getProfile, forgetPassword, resetPasswordvarify, resetPass} from "../controller/user.controller.js";
+import {registerUser, varifyUser ,login, logout, getProfile, forgetPassword, resetPasswordvarify, resetPass, getDetail} from "../controller/user.controller.js";
 import { isLoggedIn } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -19,6 +19,8 @@ router.get("/logout",isLoggedIn, logout);  // here isLoggedIn is injected middle
 router.get("/profile",isLoggedIn, getProfile);
 
 router.post("/resetpass",resetPass)
+
+router.get("/detail",getDetail)
 
 
 export default router;
